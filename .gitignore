@@ -1,0 +1,54 @@
+# Firebase
+GoogleService-Info.plist
+
+# Xcode
+DerivedData/
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.xcworkspace
+*.xcuserdata
+*.xcuserstate
+
+# SwiftPM
+.build/
+Package.resolved
+.swiftpm/xcode/package.xcworkspace/
+
+# CocoaPods
+Pods/
+Podfile.lock
+*.xcworkspace
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Archives and builds
+*.xcarchive
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Xcode project user data
+*.moved-aside
+*.xcuserstate
+
+# IDEs and macOS
+.DS_Store
+.idea/
+*.sw?
+
+# Simulator logs
+coreSimulator/

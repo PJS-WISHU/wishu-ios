@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0862735B2DE2DA7100746145 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 0862735A2DE2DA7100746145 /* FirebaseFirestore */; };
+		0862735D2DE2DA7100746145 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 0862735C2DE2DA7100746145 /* FirebaseFunctions */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		0862727C2DE2D1F500746145 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,9 +34,22 @@
 		086272852DE2D1F500746145 /* wishuUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = wishuUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0862734C2DE2D2ED00746145 /* Exceptions for "wishu" folder in "wishu" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0862726C2DE2D1F400746145 /* wishu */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0862726F2DE2D1F400746145 /* wishu */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0862734C2DE2D2ED00746145 /* Exceptions for "wishu" folder in "wishu" target */,
+			);
 			path = wishu;
 			sourceTree = "<group>";
 		};
@@ -52,6 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0862735B2DE2DA7100746145 /* FirebaseFirestore in Frameworks */,
+				0862735D2DE2DA7100746145 /* FirebaseFunctions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +132,8 @@
 			);
 			name = wishu;
 			packageProductDependencies = (
+				0862735A2DE2DA7100746145 /* FirebaseFirestore */,
+				0862735C2DE2DA7100746145 /* FirebaseFunctions */,
 			);
 			productName = wishu;
 			productReference = 0862726D2DE2D1F400746145 /* wishu.app */;
@@ -195,6 +217,9 @@
 			);
 			mainGroup = 086272642DE2D1F400746145;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				086273592DE2DA7100746145 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0862726E2DE2D1F400746145 /* Products */;
 			projectDirPath = "";
@@ -397,6 +422,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = wishu/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -436,6 +462,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = wishu/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -593,6 +620,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		086273592DE2DA7100746145 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.13.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0862735A2DE2DA7100746145 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 086273592DE2DA7100746145 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		0862735C2DE2DA7100746145 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 086273592DE2DA7100746145 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 086272652DE2D1F400746145 /* Project object */;
 }
