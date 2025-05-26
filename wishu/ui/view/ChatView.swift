@@ -20,6 +20,7 @@ struct ChatView: View {
                 .scaledToFit()
                 .frame(height: 40)
                 .padding(.vertical, 10)
+                .accessibilityHidden(true)
             Divider()
 
             // 채팅 영역

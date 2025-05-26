@@ -15,6 +15,7 @@ struct ChatbotProfile: View {
                 .scaledToFill()
                 .frame(width: 50, height: 50)
                 .clipShape(Circle())
+                .accessibilityHidden(true)
             Text("wishu")
                 .font(.custom("Pretendard-SemiBold", size: 16))
                 .foregroundColor(.black)
