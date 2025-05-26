@@ -14,10 +14,11 @@ struct ChattingBar: View {
     var body: some View {
         HStack {
             HStack {
-                TextField("메시지를 입력하세요...", text: $messageText)
+                TextField("메시지를 입력하세요.", text: $messageText)
                     .padding(.vertical, 10)
                     .padding(.leading, 20)
                     .padding(.trailing, 5)
+                    .accessibilityLabel("텍스트필드")
                 Button(action: onSend) {
                     Image("sendMessage")
                         .resizable()
@@ -25,7 +26,9 @@ struct ChattingBar: View {
                         .padding(.vertical, 10)
                         .padding(.leading, 5)
                         .padding(.trailing, 20)
+                        .accessibilityHidden(true)
                 }
+                .accessibilityLabel("메시지 보내기")
             }
             .background(Color.white)
             .cornerRadius(15)

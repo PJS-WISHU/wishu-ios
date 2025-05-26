@@ -77,11 +77,13 @@ struct CalendarView: View {
                         Image(systemName: "chevron.left")
                             .foregroundColor(Color(hex: "DF4D4D"))
                     }
+                    .accessibilityLabel("이전 달")
 
                     Button(action: { changeMonth(by: 1) }) {
                         Image(systemName: "chevron.right")
                             .foregroundColor(Color(hex: "DF4D4D"))
                     }
+                    .accessibilityLabel("다음 달")
                 }
             }
 

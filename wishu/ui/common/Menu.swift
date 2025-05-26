@@ -25,6 +25,7 @@ struct Menu: View {
             HStack(spacing: 10) {
                 Text(emoji)
                     .font(.custom("Pretendard-SemiBold", size: 16))
+                    .accessibilityHidden(true)
                 Text(message)
                     .font(.custom("Pretendard-SemiBold", size: 16))
                     .foregroundColor(isTapped ? Color(hex: "BBBBBB") : .black)
