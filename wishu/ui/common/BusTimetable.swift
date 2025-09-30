@@ -13,7 +13,7 @@ struct BusTimetable: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                ChatbotBubble(message: "'유비칸 차량관제' 앱을 설치 후, 로그인(ID: swubus, PW: 19610520)하여 버스 위치를 실시간으로 알 수 있습니다.", links: [])
+                ChatbotBubble(message: "셔틀버스는 태릉입구역 7번 출구에서 탑승할 수 있으며, '유비칸 차량관제' 앱을 설치하여 로그인(ID: swubus, PW: 19610520)하면 버스 위치를 실시간으로 알 수 있습니다.", links: [])
                 
                 ForEach(["서울여대", "태릉입구"], id: \.self) { destination in
                     let departure = (destination == "서울여대") ? "태릉입구" : "서울여대"
