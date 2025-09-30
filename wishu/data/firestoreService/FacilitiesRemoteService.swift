@@ -14,7 +14,7 @@ class FacilitiesRemoteService {
     func fetchFacilitiesItems(completion: @escaping ([FacilitiesItem]) -> Void) {
         db.collection("swu_info")
             .document("facilities")
-            .collection("2025_spring")
+            .collection("current_facilities")
             .getDocuments { snapshot, error in
                 if let error = error {
                     completion([])

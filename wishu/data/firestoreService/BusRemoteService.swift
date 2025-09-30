@@ -14,7 +14,7 @@ class BusRemoteService {
     func fetchBusItems(completion: @escaping ([BusItem]) -> Void) {
         db.collection("swu_info")
             .document("school_bus")
-            .collection("2025_spring")
+            .collection("current_school_bus")
             .getDocuments { snapshot, error in
                 if let error = error {
                     completion([])

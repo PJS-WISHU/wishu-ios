@@ -14,7 +14,7 @@ class CalendarRemoteService {
     func fetchCalendarItems(completion: @escaping ([CalendarItem]) -> Void) {
         db.collection("swu_info")
             .document("calendar")
-            .collection("2025")
+            .collection("current_calendar")
             .getDocuments { snapshot, error in
                 if let error = error {
                     completion([])
