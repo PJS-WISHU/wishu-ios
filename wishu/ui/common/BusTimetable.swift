@@ -9,20 +9,66 @@ import SwiftUI
 
 struct BusTimetable: View {
     let items: [BusItem]
+    let lang: AppLanguage
+    
+    var noticeText: String {
+        switch lang {
+        case .korean:
+            return "셔틀버스는 태릉입구역 7번 출구에서 탑승할 수 있으며, '유비칸 차량관제' 앱을 설치하여 로그인(ID: swubus, PW: 19610520)하면 버스 위치를 실시간으로 알 수 있습니다."
+        case .english:
+            return "The shuttle bus departs from Exit 7 of Taereung Station. Install the 'Ubican Vehicle Control' app and log in (ID: swubus, PW: 19610520) to check real-time bus locations."
+        }
+    }
+    let destinationsKR = ["서울여대", "태릉입구"]
+    let destinationsEN = ["To SWU", "To Taereung Station"]
+    var currentDestinations: [String] {
+        lang == .korean ? destinationsKR : destinationsEN
+    }
+    var headerTime: String {
+            lang == .korean ? "시간" : "Time"
+    }
+    var headerSemester: String {
+        lang == .korean ? "학기 중" : "During semester"
+    }
+    var headerSeasonal: String {
+        lang == .korean ? "계절학기 중" : "During seasonal semester"
+    }
 
+    func displayName(for direction: String) -> String {
+        if lang == .korean {
+            return direction
+        } else {
+            switch direction {
+            case "To SWU": return "Seoul Women's University"
+            case "To Taereung Station": return "Taereung Entrance Station"
+            default: return direction
+            }
+        }
+    }
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                ChatbotBubble(message: "셔틀버스는 태릉입구역 7번 출구에서 탑승할 수 있으며, '유비칸 차량관제' 앱을 설치하여 로그인(ID: swubus, PW: 19610520)하면 버스 위치를 실시간으로 알 수 있습니다.", links: [])
+                ChatbotBubble(message: noticeText, links: [])
                 
-                ForEach(["서울여대", "태릉입구"], id: \.self) { destination in
-                    let departure = (destination == "서울여대") ? "태릉입구" : "서울여대"
+                ForEach(currentDestinations, id: \.self) { rawDestination in
+                    let rawDeparture = (rawDestination == destinationsKR.first || rawDestination == destinationsEN.first)
+                    ? (lang == .korean ? "태릉입구" : "To Taereung Station")
+                    : (lang == .korean ? "서울여대" : "To SWU")
+                    
+                    let destination = displayName(for: rawDestination)
+                    let departure = displayName(for: rawDeparture)
 
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("🚌 \(departure) 출발 → \(destination) 도착 시간표")
-                            .font(.custom("Pretendard-Bold", size: 16))
 
-                        timetableTable(for: destination)
+                        if lang == .korean {
+                            Text("🚌 \(departure) 출발 → \(destination) 도착")
+                                .font(.custom("Pretendard-Bold", size: 16))
+                        } else {
+                            Text("🚌 Departure from \(departure) → Arrival at \(destination)")
+                                .font(.custom("Pretendard-Bold", size: 16))
+                        }
+                        timetableTable(for: rawDestination)
                     }
                 }
             }
@@ -40,11 +86,11 @@ struct BusTimetable: View {
         return VStack(spacing: 0) {
             // 헤더
             HStack {
-                Text("시간")
+                Text(headerTime)
                     .frame(width: 50, alignment: .center)
-                Text("학기 중")
+                Text(headerSemester)
                     .frame(maxWidth: .infinity, alignment: .center)
-                Text("계절학기 중")
+                Text(headerSeasonal)
                     .frame(maxWidth: .infinity, alignment: .center)
             }
             .font(.custom("Pretendard-SemiBold", size: 14))
@@ -57,12 +103,12 @@ struct BusTimetable: View {
                 let hourItems = grouped[hour] ?? []
 
                 let semesterItems = hourItems
-                    .filter { $0.sortation == "학기 중" }
+                    .filter { $0.sortation == (lang == .korean ? "학기 중" : "During Semester") }
                     .map { $0.minute }
                     .joined(separator: ", ")
 
                 let seasonalItems = hourItems
-                    .filter { $0.sortation == "계절학기 중" }
+                    .filter { $0.sortation == (lang == .korean ? "계절학기 중" : "During Seasonal Semester") }
                     .map { $0.minute }
                     .joined(separator: ", ")
 

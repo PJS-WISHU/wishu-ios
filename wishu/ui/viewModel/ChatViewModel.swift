@@ -41,6 +41,11 @@ class ChatViewModel: ObservableObject {
     private let timetableRepo = TimetableRepository()
     private let facilitiesRepo = FacilitiesRepository()
     private let registrationRepo = RegistrationRepository()
+    
+    private var lang: AppLanguage
+    init(lang: AppLanguage) {
+        self.lang = lang
+    }
 
     // gpt 요청
     func sendMessage(_ text: String) {
@@ -65,7 +70,7 @@ class ChatViewModel: ObservableObject {
     
     // 통학버스 데이터 로드
     func loadBus(completion: @escaping () -> Void) {
-        busRepo.getBusItems { [weak self] items in
+        busRepo.getBusItems(lang: lang) { [weak self] items in
             DispatchQueue.main.async {
                 self?.busItems = items
                 completion()

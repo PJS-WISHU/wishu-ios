@@ -8,9 +8,15 @@
 import SwiftUI
 
 struct ChatView: View {
+    let lang: AppLanguage
+    @StateObject private var viewModel: ChatViewModel
     @State private var messageText: String = ""
-    @StateObject private var viewModel = ChatViewModel()
     @State private var lastMessageID: UUID?
+
+    init(lang: AppLanguage) {
+        _viewModel = StateObject(wrappedValue: ChatViewModel(lang: lang))
+        self.lang = lang
+    }
 
     var body: some View {
         VStack {
@@ -76,7 +82,7 @@ struct ChatView: View {
                 IntroBubble(onSelect: viewModel.handleIntroSelection)
                 
             case .busTimetable(let items):
-                BusTimetable(items: items)
+                BusTimetable(items: items, lang: lang)
                 
             case.facilitiesList(let items):
                 FacilitiesList(items: items)
