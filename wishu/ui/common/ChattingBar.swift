@@ -15,26 +15,23 @@ struct ChattingBar: View {
         HStack {
             HStack {
                 TextField("메시지를 입력하세요.", text: $messageText)
-                    .padding(.vertical, 10)
-                    .padding(.leading, 20)
-                    .padding(.trailing, 5)
+                    .padding(.leading, 5)
                     .accessibilityLabel("텍스트필드")
                 Button(action: onSend) {
                     Image("sendMessage")
                         .resizable()
                         .frame(width: 30, height: 30)
-                        .padding(.vertical, 10)
-                        .padding(.leading, 5)
-                        .padding(.trailing, 20)
+                        .padding(.leading, 10)
                         .accessibilityHidden(true)
                 }
                 .accessibilityLabel("메시지 보내기")
             }
+            .padding(.horizontal, 15)
+            .padding(.vertical, 10)
             .background(Color.white)
             .cornerRadius(15)
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 10)
+        .padding(10)
         .background(Color(hex: "D1D3D9"))
     }
 }

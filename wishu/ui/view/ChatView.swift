@@ -56,7 +56,6 @@ struct ChatView: View {
                 }
             )
         }
-        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
     
     @ViewBuilder
