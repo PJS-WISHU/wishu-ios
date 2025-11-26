@@ -120,7 +120,7 @@ class ChatViewModel: ObservableObject {
 
     // 교내시설 데이터 로드
     func loadFacilities(completion: @escaping () -> Void) {
-        facilitiesRepo.getFacilitiesItems { [weak self] items in
+        facilitiesRepo.getFacilitiesItems(lang: lang) { [weak self] items in
             DispatchQueue.main.async {
                 self?.facilitiesItems = items
                 completion()
