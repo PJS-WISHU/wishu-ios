@@ -9,6 +9,17 @@ import SwiftUI
 
 struct FacilitiesList: View {
     let items: [FacilitiesItem]
+    let lang: AppLanguage
+    
+    var headerLocation: String {
+        lang == .korean ? "위치" : "Location"
+    }
+    var headerName: String {
+        lang == .korean ? "업체명" : "Name"
+    }
+    var headerTime: String {
+        lang == .korean ? "영업시간" : "Hours"
+    }
 
     var body: some View {
         ChatbotProfile()
@@ -17,11 +28,11 @@ struct FacilitiesList: View {
             VStack(spacing: 0) {
                 // 헤더
                 HStack {
-                    Text("위치")
+                    Text(headerLocation)
                         .frame(maxWidth: .infinity, alignment: .center)
-                    Text("업체명")
+                    Text(headerName)
                         .frame(maxWidth: .infinity, alignment: .center)
-                    Text("영업시간")
+                    Text(headerTime)
                         .frame(maxWidth: .infinity, alignment: .center)
                 }
                 .font(.custom("Pretendard-SemiBold", size: 14))
