@@ -11,30 +11,29 @@ import FirebaseFirestore
 class CalendarRemoteService {
     private let db = Firestore.firestore()
 
-    func fetchCalendarItems(completion: @escaping ([CalendarItem]) -> Void) {
+    func fetchCalendarItems(lang: AppLanguage, completion: @escaping ([CalendarItem]) -> Void) {
+        
+        let isKR = (lang == .korean)
+        
+        let collectionName = isKR
+            ? "current_calendar"
+            : "current_calendar_en"
+        
         db.collection("swu_info")
             .document("calendar")
-            .collection("current_calendar")
+            .collection(collectionName)
             .getDocuments { snapshot, error in
-                if let error = error {
-                    completion([])
-                    return
-                }
+                            
+                let docs = snapshot?.documents ?? []
 
-                guard let documents = snapshot?.documents else {
-                    completion([])
-                    return
-                }
-
-                let items: [CalendarItem] = documents.compactMap { doc in
+                let items: [CalendarItem] = docs.compactMap { doc in
                     let data = doc.data()
-                    guard let start = data["start_date"] as? String,
-                          let end = data["end_date"] as? String,
-                          let month = data["month"] as? String,
-                          let date = data["date"] as? String,
-                          let event = data["event"] as? String else {
-                        return nil
-                    }
+                    
+                    let start = data[isKR ? "start_date" : "start_date_en"] as? String ?? ""
+                    let end   = data[isKR ? "end_date"   : "end_date_en"] as? String ?? ""
+                    let month = data[isKR ? "month"      : "month_en"] as? String ?? ""
+                    let date  = data[isKR ? "date"       : "date_en"] as? String ?? ""
+                    let event = data[isKR ? "event"      : "event_en"] as? String ?? ""
 
                     return CalendarItem(
                         id: doc.documentID,

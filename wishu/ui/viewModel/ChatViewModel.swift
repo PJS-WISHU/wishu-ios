@@ -80,7 +80,7 @@ class ChatViewModel: ObservableObject {
 
     // 학사일정 데이터 로드
     func loadCalendar(completion: @escaping () -> Void) {
-        calendarRepo.getCalendarItems { [weak self] items in
+        calendarRepo.getCalendarItems(lang: lang) { [weak self] items in
             DispatchQueue.main.async {
                 self?.calendarItems = items
                 completion()
