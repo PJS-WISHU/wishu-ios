@@ -88,8 +88,7 @@ struct ChatView: View {
                 FacilitiesList(items: items)
             
             case.calendar(let items):
-                CalendarView(items: items)
-                
+                CalendarView(items: items, lang: lang)
             }
             
             Text(msg.timestamp.formattedTime())
