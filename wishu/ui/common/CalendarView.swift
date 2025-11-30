@@ -14,18 +14,11 @@ struct CalendarView: View {
     let lang: AppLanguage
     
     private var calendar: Calendar { Calendar.current }
-//    private let weekdaySymbols = ["일", "월", "화", "수", "목", "금", "토"]
     private var weekdaySymbols: [String] {
         lang == .korean
         ? ["일", "월", "화", "수", "목", "금", "토"]
         : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     }
-    
-//    private var dateFormatter: DateFormatter {
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyy년 M월"
-//        return formatter
-//    }
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = (lang == .korean) ? "yyyy년 M월" : "MMMM yyyy"
@@ -68,7 +61,6 @@ struct CalendarView: View {
     var body: some View {
         ChatbotProfile()
         VStack(spacing: 10) {
-//            Text("학사일정")
             Text(lang == .korean ? "학사일정" : "Academic Calendar")
                 .font(.custom("Pretendard-SemiBold", size: 26))
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -148,7 +140,6 @@ struct CalendarView: View {
             
             // 이벤트 박스
             VStack(alignment: .leading, spacing: 8) {
-//                Text("📌 선택한 날짜의 일정")
                 Text(lang == .korean ? "📌 선택한 날짜의 일정" : "📌 Schedule for Selected Date")
                     .font(.custom("Pretendard-SemiBold", size: 16))
                     .padding(.vertical, 5)
@@ -161,7 +152,6 @@ struct CalendarView: View {
                     }
 
                     if eventsForDate.isEmpty {
-//                        Text("해당 날짜에는 일정이 없습니다.")
                         Text(lang == .korean ? "해당 날짜에는 일정이 없습니다." : "No events on this date.")
 
                             .font(.custom("Pretendard-Regular", size: 16))
@@ -181,7 +171,6 @@ struct CalendarView: View {
                         }
                     }
                 } else {
-//                    Text("날짜를 선택해주세요.")
                     Text(lang == .korean ? "날짜를 선택해주세요." : "Please select a date.")
                         .font(.custom("Pretendard-Regular", size: 16))
                         .foregroundColor(.gray)

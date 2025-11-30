@@ -16,17 +16,15 @@ class LanguageManager: ObservableObject {
     @Published var lang: AppLanguage
 
     init() {
-        // 시스템 언어 가져오기
-        let code = Locale.current.language.languageCode?.identifier ?? "en"
+        let preferred = Locale.preferredLanguages.first ?? "en"
+        print("🔥 [LANG DEBUG] preferredLanguages.first = \(preferred)")
 
-        if code == AppLanguage.korean.rawValue {
+        if preferred.hasPrefix("ko") {
             lang = .korean
         } else {
             lang = .english
         }
-    }
-    
-    func setLanguage(_ language: AppLanguage) {
-        lang = language
+
+        print("🌐 [LANG RESULT] 최종 설정된 언어 = \(lang)")
     }
 }
