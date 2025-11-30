@@ -10,6 +10,7 @@ import SwiftUI
 struct ChatbotBubble: View {
     let message: String
     let links: [LinkItem]
+    let lang: AppLanguage
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -24,7 +25,7 @@ struct ChatbotBubble: View {
                     .foregroundColor(.black)
                     .padding(15)
                 ForEach(links, id: \.url) { link in
-                    LinkButton(linkName: link.name, url: link.url)
+                    LinkButton(linkName: link.name, url: link.url, lang: lang)
                         .padding(.horizontal, 15)
                         .padding(.bottom, 15)
                 }

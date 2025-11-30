@@ -10,11 +10,16 @@ import SwiftUI
 struct ChattingBar: View {
     @Binding var messageText: String
     var onSend: () -> Void
+    let lang: AppLanguage
+    
+    private var placeholder: String {
+            lang == .korean ? "메시지를 입력하세요." : "Type a message..."
+        }
 
     var body: some View {
         HStack {
             HStack {
-                TextField("메시지를 입력하세요.", text: $messageText)
+                TextField(placeholder, text: $messageText)
                     .padding(.leading, 5)
                     .accessibilityLabel("텍스트필드")
                 Button(action: onSend) {

@@ -10,13 +10,21 @@ import SwiftUI
 struct LinkButton: View {
     let linkName: String
     let url: String
+    let lang: AppLanguage
 
     var body: some View {
         NavigationLink(destination: WebViewScreen(url: url, title: linkName)) {
-                Text(linkName + " 보러가기 ↗️")
+            Text(displayText)
                     .font(.custom("Pretendard-Bold", size: 16))
                     .foregroundColor(.black)
                     .underline()
+        }
+    }
+    private var displayText: String {
+        if lang == .korean {
+            return "\(linkName) 보러가기 ↗️"
+        } else {
+            return "Open \(linkName) ↗️"
         }
     }
 }

@@ -49,7 +49,7 @@ struct BusTimetable: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                ChatbotBubble(message: noticeText, links: [])
+                ChatbotBubble(message: noticeText, links: [], lang: lang)
                 
                 ForEach(currentDestinations, id: \.self) { rawDestination in
                     let rawDeparture = (rawDestination == destinationsKR.first || rawDestination == destinationsEN.first)
