@@ -85,7 +85,7 @@ struct ChatView: View {
                 BusTimetable(items: items, lang: lang)
                 
             case.facilitiesList(let items):
-                FacilitiesList(items: items, lang: lang)
+                FacilitiesList(items: items)
             
             case.calendar(let items):
                 CalendarView(items: items, lang: lang)
