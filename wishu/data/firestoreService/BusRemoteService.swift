@@ -11,30 +11,29 @@ import FirebaseFirestore
 class BusRemoteService {
     private let db = Firestore.firestore()
 
-    func fetchBusItems(completion: @escaping ([BusItem]) -> Void) {
+    func fetchBusItems(lang: AppLanguage, completion: @escaping ([BusItem]) -> Void) {
+        
+        let isKR = (lang == .korean)
+        
+        let collectionName = isKR
+            ? "current_school_bus"
+            : "current_school_bus_en"
+        
         db.collection("swu_info")
             .document("school_bus")
-            .collection("current_school_bus")
+            .collection(collectionName)
             .getDocuments { snapshot, error in
-                if let error = error {
-                    completion([])
-                    return
-                }
+                
+                let docs = snapshot?.documents ?? []
 
-                guard let documents = snapshot?.documents else {
-                    completion([])
-                    return
-                }
-
-                let items: [BusItem] = documents.compactMap { doc in
+                let items: [BusItem] = docs.compactMap { doc in
                     let data = doc.data()
-                    guard let key = data["key"] as? Int,
-                          let direction = data["direction"] as? String,
-                          let sortation = data["sortation"] as? String,
-                          let hour = data["hour"] as? Int,
-                          let minute = data["minute"] as? String else {
-                        return nil
-                    }
+
+                    let key      = data[isKR ? "key" : "key_en"] as? Int ?? 0
+                    let direction = data[isKR ? "direction" : "direction_en"] as? String ?? ""
+                    let sortation = data[isKR ? "sortation" : "sortation_en"] as? String ?? ""
+                    let hour     = data[isKR ? "hour" : "hour_en"] as? Int ?? 0
+                    let minute   = data[isKR ? "minute" : "minute_en"] as? String ?? ""
 
                     return BusItem(
                         id: doc.documentID,
@@ -45,7 +44,7 @@ class BusRemoteService {
                         minute: minute
                     )
                 }
-
+                
                 completion(items)
             }
     }

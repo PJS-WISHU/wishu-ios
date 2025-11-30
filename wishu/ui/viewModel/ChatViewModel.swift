@@ -41,6 +41,11 @@ class ChatViewModel: ObservableObject {
     private let timetableRepo = TimetableRepository()
     private let facilitiesRepo = FacilitiesRepository()
     private let registrationRepo = RegistrationRepository()
+    
+    private var lang: AppLanguage
+    init(lang: AppLanguage) {
+        self.lang = lang
+    }
 
     // gpt 요청
     func sendMessage(_ text: String) {
@@ -65,7 +70,7 @@ class ChatViewModel: ObservableObject {
     
     // 통학버스 데이터 로드
     func loadBus(completion: @escaping () -> Void) {
-        busRepo.getBusItems { [weak self] items in
+        busRepo.getBusItems(lang: lang) { [weak self] items in
             DispatchQueue.main.async {
                 self?.busItems = items
                 completion()
@@ -75,7 +80,7 @@ class ChatViewModel: ObservableObject {
 
     // 학사일정 데이터 로드
     func loadCalendar(completion: @escaping () -> Void) {
-        calendarRepo.getCalendarItems { [weak self] items in
+        calendarRepo.getCalendarItems(lang: lang) { [weak self] items in
             DispatchQueue.main.async {
                 self?.calendarItems = items
                 completion()
@@ -115,7 +120,7 @@ class ChatViewModel: ObservableObject {
 
     // 교내시설 데이터 로드
     func loadFacilities(completion: @escaping () -> Void) {
-        facilitiesRepo.getFacilitiesItems { [weak self] items in
+        facilitiesRepo.getFacilitiesItems(lang: lang) { [weak self] items in
             DispatchQueue.main.async {
                 self?.facilitiesItems = items
                 completion()
@@ -145,7 +150,14 @@ class ChatViewModel: ObservableObject {
     
     // IntroBubble 메뉴 선택 핸들링
     func handleIntroSelection(_ selected: IntroMenuType) {
-        messages.append(ChatMessage(type: .text(selected.displayName), isFromUser: true))
+        
+        // UserBubble로 선택한 메뉴 출력
+        messages.append(
+                ChatMessage(
+                    type: .text(selected.title(for: lang)),
+                    isFromUser: true
+                )
+            )
         
         switch selected {
             
@@ -187,8 +199,16 @@ class ChatViewModel: ObservableObject {
             loadContacts {
                 let message = ChatMessage(
                     type: .multiLink(
-                        message: "교내 연락처 안내입니다.\n더 궁금한 게 있다면 언제든지 물어보세요!",
-                        links: [LinkItem(name: "교내 연락처", url: self.contactsURL)]
+                        message: self.text(
+                            "교내 연락처 안내입니다.\n더 궁금한 게 있다면 언제든지 물어보세요!",
+                            "Here is the campus contact information.\nFeel free to ask if you need anything else!"
+                        ),
+                        links: [
+                            LinkItem(
+                                name: self.text("교내 연락처", "Campus Contacts"),
+                                url: self.contactsURL
+                            )
+                        ]
                     ),
                     isFromUser: false
                 )
@@ -201,8 +221,16 @@ class ChatViewModel: ObservableObject {
             loadTimetable {
                 let message = ChatMessage(
                     type: .multiLink(
-                        message: "강의실 및 시간표 안내입니다.\n더 궁금한 게 있다면 언제든지 물어보세요!",
-                        links: [LinkItem(name: "강의실 및 시간표", url: self.timetableURL)]
+                        message: self.text(
+                            "강의실 및 시간표 안내입니다.\n더 궁금한 게 있다면 언제든지 물어보세요!",
+                            "Here is the classroom & timetable information.\nLet me know if you have more questions!"
+                        ),
+                        links: [
+                            LinkItem(
+                                name: self.text("강의실 및 시간표", "Classrooms & Timetable"),
+                                url: self.timetableURL
+                            )
+                        ]
                     ),
                     isFromUser: false
                 )
@@ -215,8 +243,16 @@ class ChatViewModel: ObservableObject {
             loadNotice {
                 let message = ChatMessage(
                     type: .multiLink(
-                        message: "공지사항 안내입니다.\n더 궁금한 게 있다면 언제든지 물어보세요!",
-                        links: [LinkItem(name: "공지사항", url: self.noticeURL)]
+                        message: self.text(
+                            "공지사항 안내입니다.\n더 궁금한 게 있다면 언제든지 물어보세요!",
+                            "Here are the campus announcements.\nLet me know if you need more info!"
+                        ),
+                        links: [
+                            LinkItem(
+                                name: self.text("공지사항", "Announcements"),
+                                url: self.noticeURL
+                            )
+                        ]
                     ),
                     isFromUser: false
                 )
@@ -227,29 +263,36 @@ class ChatViewModel: ObservableObject {
         // 수강신청
         case .registration:
             loadRegistration {
-                let tuples: [(String, String)] = [
-                    ("석사학위과정", self.graduate_program),
-                    ("수강신청", self.course_registration),
-                    ("수강정정", self.course_change),
-                    ("재수강신청", self.retake_registration),
-                    ("중도포기", self.course_withdrawal),
-                    ("학점교류", self.credit_exchange),
-                    ("학점이월제", self.credit_carryover)
+                
+                let tuples: [(String, String, String)] = [
+                    ("석사학위과정", "Graduate Program", self.graduate_program),
+                    ("수강신청", "Course Registration", self.course_registration),
+                    ("수강정정", "Course Change", self.course_change),
+                    ("재수강신청", "Retake Registration", self.retake_registration),
+                    ("중도포기", "Course Withdrawal", self.course_withdrawal),
+                    ("학점교류", "Credit Exchange", self.credit_exchange),
+                    ("학점이월제", "Credit Carryover", self.credit_carryover)
                 ]
 
-                let links: [LinkItem] = tuples.map { LinkItem(name: $0.0, url: $0.1) }
+                let links: [LinkItem] = tuples.map {
+                    LinkItem(name: self.text($0.0, $0.1), url: $0.2)
+                }
 
                 let message = ChatMessage(
                     type: .multiLink(
-                        message: "수강신청 안내입니다.\n더 궁금한 게 있다면 언제든지 물어보세요!",
+                        message: self.text(
+                            "수강신청 안내입니다.\n더 궁금한 게 있다면 언제든지 물어보세요!",
+                            "Here is the course registration information.\nFeel free to ask if you need more help!"
+                        ),
                         links: links
                     ),
                     isFromUser: false
                 )
+                
                 self.messages.append(message)
                 self.lastMessageID = message.id
             }
-            
+
         default:
             messages.append(
                 ChatMessage(
@@ -260,4 +303,10 @@ class ChatViewModel: ObservableObject {
         }
     }
 
+}
+
+extension ChatViewModel {
+    private func text(_ korean: String, _ english: String) -> String {
+        return lang == .korean ? korean : english
+    }
 }

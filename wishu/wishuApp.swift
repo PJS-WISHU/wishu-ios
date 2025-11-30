@@ -11,6 +11,8 @@ import FirebaseCore
 @main
 struct wishuApp: App {
     
+    @StateObject var langManager = LanguageManager()
+    
     init() {
         FirebaseApp.configure()
         FirebaseConfiguration.shared.setLoggerLevel(.debug)
@@ -26,7 +28,7 @@ struct wishuApp: App {
                         showOnboarding = false
                     }
                 } else {
-                    ChatView()
+                    ChatView(lang: langManager.lang)
                 }
             }
         }

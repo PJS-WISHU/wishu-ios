@@ -8,9 +8,15 @@
 import SwiftUI
 
 struct ChatView: View {
+    let lang: AppLanguage
+    @StateObject private var viewModel: ChatViewModel
     @State private var messageText: String = ""
-    @StateObject private var viewModel = ChatViewModel()
     @State private var lastMessageID: UUID?
+
+    init(lang: AppLanguage) {
+        _viewModel = StateObject(wrappedValue: ChatViewModel(lang: lang))
+        self.lang = lang
+    }
 
     var body: some View {
         VStack {
@@ -53,7 +59,8 @@ struct ChatView: View {
                 onSend: {
                     viewModel.sendMessage(messageText)
                     messageText = ""
-                }
+                },
+                lang: lang
             )
         }
     }
@@ -66,24 +73,24 @@ struct ChatView: View {
                 if msg.isFromUser {
                     UserBubble(message: text)
                 } else {
-                    ChatbotBubble(message: text, links: [])
+                    ChatbotBubble(message: text, links: [], lang: lang)
                 }
                 
             case .multiLink(let message, let links):
-                ChatbotBubble(message: message, links: links)
+                ChatbotBubble(message: message, links: links, lang: lang)
                 
             case .intro:
-                IntroBubble(onSelect: viewModel.handleIntroSelection)
+                IntroBubble(onSelect: viewModel.handleIntroSelection, lang: lang)
                 
             case .busTimetable(let items):
-                BusTimetable(items: items)
+                BusTimetable(items: items, lang: lang)
                 
             case.facilitiesList(let items):
-                FacilitiesList(items: items)
+                FacilitiesList(items: items, lang: lang
+                )
             
             case.calendar(let items):
-                CalendarView(items: items)
-                
+                CalendarView(items: items, lang: lang)
             }
             
             Text(msg.timestamp.formattedTime())

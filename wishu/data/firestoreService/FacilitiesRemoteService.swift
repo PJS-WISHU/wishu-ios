@@ -11,30 +11,30 @@ import FirebaseFirestore
 class FacilitiesRemoteService {
     private let db = Firestore.firestore()
 
-    func fetchFacilitiesItems(completion: @escaping ([FacilitiesItem]) -> Void) {
+    func fetchFacilitiesItems(lang: AppLanguage, completion: @escaping ([FacilitiesItem]) -> Void) {
+        
+        let isKR = (lang == .korean)
+        
+        let collectionName = isKR
+            ? "current_facilities"
+            : "current_facilities_en"
+        
         db.collection("swu_info")
             .document("facilities")
-            .collection("current_facilities")
+            .collection(collectionName)
             .getDocuments { snapshot, error in
-                if let error = error {
-                    completion([])
-                    return
-                }
+                
+                let docs = snapshot?.documents ?? []
 
-                guard let documents = snapshot?.documents else {
-                    completion([])
-                    return
-                }
-
-                let items: [FacilitiesItem] = documents.compactMap { doc in
+                let items: [FacilitiesItem] = docs.compactMap { doc in
                     let data = doc.data()
-                    guard let name = data["name"] as? String,
-                          let location = data["location"] as? String,
-                          let hours = data["hours"] as? String
-                    else {
-                        return nil
-                    }
-
+                    
+                    print("📄 Loaded documents: \(docs.count)")
+                    
+                    let name     = data[isKR ? "name"     : "name_en"] as? String ?? ""
+                    let location = data[isKR ? "location" : "location_en"] as? String ?? ""
+                    let hours    = data[isKR ? "hours"    : "hours_en"] as? String ?? ""
+                    
                     return FacilitiesItem(
                         id: doc.documentID,
                         name: name,
