@@ -21,11 +21,13 @@ struct IntroBubble: View {
                 links: [],
                 lang: lang
             )
+            .padding(.bottom, 10)
             
             ForEach(menuList, id: \.self) { menu in
                 Menu(
-                    emoji: emoji(for: menu),
+                    iconName: iconName(for: menu),
                     message: menu.title(for: lang),
+                    showLinkIcon: menu.needsLinkIcon,
                     onTap: { onSelect(menu) }
                 )
             }
@@ -35,15 +37,15 @@ struct IntroBubble: View {
         [.shuttle, .facility, .schedule, .contacts, .timetable, .notice, .registration]
     }
 
-    private func emoji(for menu: IntroMenuType) -> String {
+    private func iconName(for menu: IntroMenuType) -> String {
         switch menu {
-        case .shuttle: return "🚎"
-        case .facility: return "🏫"
-        case .schedule: return "🗓️"
-        case .contacts: return "☎️"
-        case .timetable: return "📚"
-        case .notice: return "📢"
-        case .registration: return "💻"
+        case .shuttle:       return "shuttle"
+        case .facility:      return "facility"
+        case .schedule:      return "schedule"
+        case .contacts:      return "contacts"
+        case .timetable:     return "timetable"
+        case .notice:        return "notice"
+        case .registration:  return "registration"
         }
     }
 }

@@ -28,4 +28,12 @@ extension IntroMenuType {
             return lang == .korean ? "수강신청" : "Course Registration"
         }
     }
+    var needsLinkIcon: Bool {
+        switch self {
+        case .contacts, .registration, .notice, .timetable:
+            return true
+        default:
+            return false
+        }
+    }
 }

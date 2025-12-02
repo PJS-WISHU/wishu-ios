@@ -12,13 +12,14 @@ struct UserBubble: View {
     
     var body: some View {
         Text(message)
-            .font(.custom("Pretendard-Medium", size: 16))
+            .font(.custom("Pretendard-Regular", size: 16))
             .lineLimit(nil)
             .foregroundColor(.black)
             .padding(15)
             .background(
-                RoundedCorner(radius: 20, corners: [.topLeft, .topRight, .bottomLeft])
-                    .fill(Color(hex: "FCE9E9"))
+                RoundedCorner(radius: 20, corners: [.topLeft, .bottomRight, .bottomLeft])
+                    .fill(Color(hex: "FFE0C3"))
+                    .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 4)
             )
             .frame(maxWidth: .infinity, alignment: .trailing)
     }

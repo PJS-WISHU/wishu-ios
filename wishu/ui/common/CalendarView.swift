@@ -59,43 +59,44 @@ struct CalendarView: View {
     }
     
     var body: some View {
-        ChatbotProfile()
+        ChatbotBubble(
+            message: lang == .korean
+                ? "학사일정 안내입니다.\n더 궁금한 게 있다면 언제든지 물어보세요!"
+                : "Here is the academic schedule.\nFeel free to ask if you have any questions!",
+            links: [],
+            lang: lang
+        )
+        .padding(.bottom, 30)
+        
         VStack(spacing: 10) {
-            Text(lang == .korean ? "학사일정" : "Academic Calendar")
-                .font(.custom("Pretendard-SemiBold", size: 26))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top)
-            
             // 상단 월/년 및 이동 버튼
             HStack {
-                // 왼쪽: 현재 연도 및 월
-                Text(dateFormatter.string(from: currentDate))
-                    .font(.custom("Pretendard-SemiBold", size: 16))
-                    .foregroundColor(.black)
-
-                Spacer()
-
-                // 오른쪽: 좌우 화살표 버튼
-                HStack(spacing: 20) {
-                    Button(action: { changeMonth(by: -1) }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(Color(hex: "DF4D4D"))
-                    }
-                    .accessibilityLabel("이전 달")
-
-                    Button(action: { changeMonth(by: 1) }) {
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(Color(hex: "DF4D4D"))
-                    }
-                    .accessibilityLabel("다음 달")
+                Button(action: { changeMonth(by: -1) }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(Color(hex: "8E8E93"))
                 }
+                .accessibilityLabel("이전 달")
+                
+                Spacer()
+                
+                Text(dateFormatter.string(from: currentDate))
+                    .font(.custom("Pretendard-Medium", size: 18))
+                    .foregroundColor(.black)
+                
+                Spacer()
+                
+                Button(action: { changeMonth(by: 1) }) {
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(Color(hex: "8E8E93"))
+                }
+                .accessibilityLabel("다음 달")
             }
 
             // 요일 헤더
             HStack {
                 ForEach(weekdaySymbols, id: \.self) { weekday in
                     Text(weekday)
-                        .font(.custom("Pretendard-SemiBold", size: 16))
+                        .font(.custom("Pretendard-Medium", size: 16))
                         .frame(maxWidth: .infinity)
                         .foregroundColor(.black)
                 }
@@ -119,15 +120,11 @@ struct CalendarView: View {
                         if isToday {
                             Circle().fill(Color(hex: "FCE9E9"))
                         } else if isSchedule {
-                            Circle().fill(Color(hex: "E8F3FD"))
+                            Circle().fill(Color(hex: "B3DBC0"))
                         }
 
                         Text("\(day)")
-                            .foregroundColor(
-                                isToday ? Color(hex: "D54242") :
-                                isSchedule ? Color(hex: "101077") :
-                                Color(hex: "BBBBBB")
-                            )
+                            .foregroundColor( isToday ? Color(hex: "D54242") : isSchedule ? Color(hex: "689290") : Color(hex: "BBBBBB") )
                             .font(.custom("Pretendard-Bold", size: 16))
                             .padding(8)
                     }
@@ -138,51 +135,113 @@ struct CalendarView: View {
                 }
             }
             
+//            // 이벤트 박스
+//            VStack(alignment: .leading, spacing: 8) {
+//                Text(
+//                    selectedDate != nil
+//                    ? (lang == .korean
+//                        ? "\(formattedSelectedDate(selectedDate!)) 일정"
+//                        : "\(formattedSelectedDate(selectedDate!)) Schedule"
+//                      )
+//                    : (lang == .korean
+//                        ? "날짜를 선택해주세요."
+//                        : "Please select a date.")
+//                )
+//                .font(.custom("Pretendard-SemiBold", size: 16))
+//                .padding(.vertical, 5)
+//
+//                if let selected = selectedDate {
+//                    let eventsForDate: [CalendarItem] = items.filter {
+//                        guard let start = dateFromString($0.start_date),
+//                              let end = dateFromString($0.end_date) else { return false }
+//                        return selected >= start && selected <= end
+//                    }
+//
+//                    if eventsForDate.isEmpty {
+//                        Text(lang == .korean ? "해당 날짜에는 일정이 없습니다." : "No events on this date.")
+//
+//                            .font(.custom("Pretendard-Regular", size: 16))
+//                            .foregroundColor(.gray)
+//                            .padding(8)
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+//                            .background(Color.gray.opacity(0.05))
+//                            .cornerRadius(8)
+//                    } else {
+//                        ForEach(eventsForDate, id: \.id) { event in
+//                            Text(event.date + ", " + event.event)
+//                                .font(.custom("Pretendard-Regular", size: 16))
+//                                .padding(8)
+//                                .frame(maxWidth: .infinity, alignment: .leading)
+//                                .background(Color.gray.opacity(0.1))
+//                                .cornerRadius(8)
+//                        }
+//                    }
+//                } else {
+//                    Text(lang == .korean ? "날짜를 선택해주세요." : "Please select a date.")
+//                        .font(.custom("Pretendard-Regular", size: 16))
+//                        .foregroundColor(.gray)
+//                        .padding(8)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .background(Color.gray.opacity(0.05))
+//                        .cornerRadius(8)
+//                }
+//            }
+//            .padding()
+//            .background(Color.white)
+//            .cornerRadius(20)
+//            .shadow(radius: 1)
+            
             // 이벤트 박스
             VStack(alignment: .leading, spacing: 8) {
-                Text(lang == .korean ? "📌 선택한 날짜의 일정" : "📌 Schedule for Selected Date")
-                    .font(.custom("Pretendard-SemiBold", size: 16))
-                    .padding(.vertical, 5)
+                
+                // 1) 선택된 날짜가 없으면 -> today 사용
+                let targetDate = selectedDate ?? Date()
+                
+                // 날짜 제목
+                Text(
+                    lang == .korean
+                    ? "\(formattedSelectedDate(targetDate)) 일정"
+                    : "\(formattedSelectedDate(targetDate)) Schedule"
+                )
+                .font(.custom("Pretendard-SemiBold", size: 16))
+                .padding(.vertical, 5)
+                
+                // 2) targetDate(=selectedDate 또는 오늘 날짜) 기준 이벤트 필터링
+                let eventsForDate: [CalendarItem] = items.filter {
+                    guard let start = dateFromString($0.start_date),
+                          let end = dateFromString($0.end_date) else { return false }
+                    return targetDate >= start && targetDate <= end
+                }
 
-                if let selected = selectedDate {
-                    let eventsForDate: [CalendarItem] = items.filter {
-                        guard let start = dateFromString($0.start_date),
-                              let end = dateFromString($0.end_date) else { return false }
-                        return selected >= start && selected <= end
-                    }
+                // 3) 이벤트가 없을 경우
+                if eventsForDate.isEmpty {
+                    Text(
+                        lang == .korean
+                        ? "해당 날짜에는 일정이 없습니다."
+                        : "No events on this date."
+                    )
+                    .font(.custom("Pretendard-Regular", size: 16))
+                    .foregroundColor(.gray)
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.gray.opacity(0.05))
+                    .cornerRadius(8)
 
-                    if eventsForDate.isEmpty {
-                        Text(lang == .korean ? "해당 날짜에는 일정이 없습니다." : "No events on this date.")
-
+                } else {
+                    // 4) 이벤트가 있을 경우
+                    ForEach(eventsForDate, id: \.id) { event in
+                        Text(event.date + ", " + event.event)
                             .font(.custom("Pretendard-Regular", size: 16))
-                            .foregroundColor(.gray)
                             .padding(8)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color.gray.opacity(0.05))
+                            .background(Color.gray.opacity(0.1))
                             .cornerRadius(8)
-                    } else {
-                        ForEach(eventsForDate, id: \.id) { event in
-                            Text(event.date + ", " + event.event)
-                                .font(.custom("Pretendard-Regular", size: 16))
-                                .padding(8)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(8)
-                        }
                     }
-                } else {
-                    Text(lang == .korean ? "날짜를 선택해주세요." : "Please select a date.")
-                        .font(.custom("Pretendard-Regular", size: 16))
-                        .foregroundColor(.gray)
-                        .padding(8)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.gray.opacity(0.05))
-                        .cornerRadius(8)
                 }
             }
             .padding()
             .background(Color.white)
-            .cornerRadius(10)
+            .cornerRadius(20)
             .shadow(radius: 1)
         }
     }
@@ -192,5 +251,15 @@ struct CalendarView: View {
             currentDate = newDate
             selectedDate = nil
         }
+    }
+    
+    private func formattedSelectedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        if lang == .korean {
+            formatter.dateFormat = "M월 d일"
+        } else {
+            formatter.dateFormat = "MMMM d"
+        }
+        return formatter.string(from: date)
     }
 }

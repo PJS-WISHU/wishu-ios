@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct Menu: View {
-    let emoji: String
+    let iconName: String
     let message: String
+    let showLinkIcon: Bool
     let onTap: () -> Void
 
     @State private var isTapped = false
@@ -22,25 +23,36 @@ struct Menu: View {
                 onTap()
             }
         }) {
-            HStack(spacing: 10) {
-                Text(emoji)
-                    .font(.custom("Pretendard-SemiBold", size: 16))
-                    .accessibilityHidden(true)
+            HStack {
+                Image(iconName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .padding(.leading, 20)
+                
                 Text(message)
-                    .font(.custom("Pretendard-SemiBold", size: 16))
+                    .font(.custom("Pretendard-Regular", size: 16))
                     .foregroundColor(isTapped ? Color(hex: "BBBBBB") : .black)
+                    .padding(.leading, 5)
+                
+                if showLinkIcon {
+                    Image("linkIcon")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 22, height: 22)
+                }
             }
-            .padding(12)
+            .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 40)
                     .fill(Color.white)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color(hex: "D1D3D9"), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 40)
+                            .stroke(Color(hex: "DFDFDF"), lineWidth: 1)
                     )
             )
-            .padding(.trailing, 100)
+            .padding(.trailing, 140)
         }
         .buttonStyle(PlainButtonStyle())
         .contentShape(Rectangle())

@@ -13,30 +13,31 @@ struct ChattingBar: View {
     let lang: AppLanguage
     
     private var placeholder: String {
-            lang == .korean ? "메시지를 입력하세요." : "Type a message..."
-        }
+        lang == .korean ? "메시지를 입력해주세요." : "Type a message..."
+    }
 
     var body: some View {
         HStack {
             HStack {
                 TextField(placeholder, text: $messageText)
-                    .padding(.leading, 5)
                     .accessibilityLabel("텍스트필드")
+                    .padding(.leading, 20)
+                
                 Button(action: onSend) {
                     Image("sendMessage")
                         .resizable()
-                        .frame(width: 30, height: 30)
-                        .padding(.leading, 10)
+                        .frame(width: 20, height: 20)
                         .accessibilityHidden(true)
                 }
                 .accessibilityLabel("메시지 보내기")
+                .padding(.trailing, 20)
             }
-            .padding(.horizontal, 15)
             .padding(.vertical, 10)
-            .background(Color.white)
-            .cornerRadius(15)
+            .background(Color(hex: "F2F2F2"))
+            .cornerRadius(20)
         }
-        .padding(10)
-        .background(Color(hex: "D1D3D9"))
+        .padding(.horizontal, 15)
+        .padding(.vertical, 5)
+        .background(Color.white)
     }
 }

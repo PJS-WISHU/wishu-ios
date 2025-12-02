@@ -20,30 +20,27 @@ struct ChatbotBubble: View {
             // 챗봇 버블
             VStack(alignment: .leading) {
                 Text(message)
-                    .font(.custom("Pretendard-Medium", size: 16))
+                    .font(.custom("Pretendard-Regular", size: 16))
                     .lineLimit(nil)
                     .foregroundColor(.black)
                     .padding(15)
-                ForEach(links, id: \.url) { link in
-                    LinkButton(linkName: link.name, url: link.url, lang: lang)
-                        .padding(.horizontal, 15)
-                        .padding(.bottom, 15)
-                }
             }
             .background(
                 RoundedCorner(radius: 20, corners: [.topRight, .bottomRight, .bottomLeft])
                     .fill(.white)
+                    .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 4)
             )
             .overlay(
                 RoundedCorner(radius: 20, corners: [.topRight, .bottomRight, .bottomLeft])
-                    .stroke(Color(hex: "D1D3D9"), lineWidth: 1)
+                    .stroke(Color(hex: "DFDFDF"), lineWidth: 1)
             )
             .frame(maxWidth: .infinity, alignment: .leading)
+
+            ForEach(Array(links.enumerated()), id: \.element.url) { index, link in
+                LinkButton(linkName: link.name, url: link.url, lang: lang)
+                    .padding(.top, index == 0 ? 10 : 0)
+            }
+
         }
     }
-}
-
-struct LinkItem: Hashable, Equatable {
-    let name: String
-    let url: String
 }
